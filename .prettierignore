@@ -1,0 +1,10 @@
+/package
+.env
+.env.*
+!.env.example
+/.vscode
+/node_modules
+./dist
+node_modules_container
+docs
+.git

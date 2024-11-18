@@ -11,7 +11,7 @@ dotenv.config({
 connectionDb()
 .then(()=>{
     app.listen(process.env.PORT || 9871, () =>{
-        console.log(`⚙️  Server is running at port : ${process.env.PORT}`)
+        console.log(`⚙️ Server is running at port : ${process.env.PORT}`)
     })
 })
 .catch((err)=>{

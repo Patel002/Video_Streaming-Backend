@@ -9,7 +9,7 @@ const userSchema = new Schema(
       required: true,
       unique: true,
       lowercase: true,
-      trime: true,
+      trim: true,
       index: true,
     },
     email: {
@@ -17,12 +17,12 @@ const userSchema = new Schema(
       required: true,
       unique: true,
       lowercase: true,
+      trim: true
     },
     fullname: {
       type: String,
       required: true,
-      lowercase: true,
-      trime: true,
+      trim: true,
       index: true,
     },
     avatar: {
@@ -63,7 +63,7 @@ userSchema.methods.isPasswordCorrect = async function (password) {
 };
 
 userSchema.methods.generateAccessToken = function () {
-  jwt.sign(
+  return jwt.sign(
     {
       _id: this._id,
       name: this.name,
@@ -78,7 +78,7 @@ userSchema.methods.generateAccessToken = function () {
 };
 
 userSchema.methods.generateRefreshToken = function () {
-  jwt.sign(
+  return jwt.sign(
     {
       _id: this._id,
     },

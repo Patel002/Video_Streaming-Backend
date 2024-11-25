@@ -67,11 +67,18 @@ const deleteFromCloudinary = async(publicUrl) => {
     
         const publicId = publicUrl.split('/').pop().split('.')[0]
         // console.log("file publicId",publicId)
+        
+        const video =  await cloudinary.uploader.destroy(publicId, {
+            resource_type: "video"
+        })
+        
+         await cloudinary.uploader.destroy(publicId, {
+            resource_type: "image"
+        })
+        
     
-        const response =  await cloudinary.uploader.destroy(publicId)
-        // console.log("response",response)
-        return response
-
+        return video
+        
     } catch (error) {
         console.log("Error while deleting image from cloudinary",error)
         return null
@@ -81,4 +88,4 @@ const deleteFromCloudinary = async(publicUrl) => {
 export { 
     uploadOnCloudinary,
     deleteFromCloudinary
- }
+}

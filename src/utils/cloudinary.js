@@ -2,6 +2,7 @@ import {v2 as cloudinary} from "cloudinary"
 import fs from "fs"
 import { ApiError} from "../utils/ApiError.js"
 
+
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -28,33 +29,56 @@ const uploadOnCloudinary = async (localFilePath) => {
     }
 }
 
-const getPublicId = async(url) => {
-    if(!url) return null
+// const getPublicId = async(url) => {
+//     if(!url) return null
 
-    return url.split('/').pop().split('.')[0]
-}
-const oldImageDelete = async(publicUrl) => {
+//     return url.split('/').pop().split('.')[0]
+// }
+// const deleteFromCloudinary = async(publicUrl) => {
     
-    try {
-        if(!publicUrl) throw new ApiError(400, "No url provided for deletion");
+//     try {
+//         console.log("publicUrl",publicUrl)
+//         if(!publicUrl) throw new ApiError(400, "No url provided for deletion");
          
-        const publicId = publicUrl.includes('/')?getPublicId(publicUrl) : publicUrl 
+//         const publicId = publicUrl.includes('/')?getPublicId(publicUrl) : publicUrl 
 
-        if(!publicId) throw new ApiError(400, "No public id found in url");
+//         if(!publicId) throw new ApiError(400, "No public id found in url");
         
-        const response = await cloudinary.uploader.destroy(publicId,{
-            resource_type: "image"
-        })
+//          console.log("file publicId",publicId)
+            
+//         const response = await cloudinary.uploader.destroy(publicId, {
+//             resource_type: "image",
+//             invalidate: true,
+//         })
+//         console.log("response",response)
+//         return response
+        
+//     } catch (error) {
+//          console.error(401, "Error while deleting image from cloudinary",error)
+        
+//     }
+// }
+
+const deleteFromCloudinary = async(publicUrl) => {
+    try {
+        
+        if(!publicUrl) return null
+        // console.log("publicUrl",publicUrl)
     
+        const publicId = publicUrl.split('/').pop().split('.')[0]
+        // console.log("file publicId",publicId)
+    
+        const response =  await cloudinary.uploader.destroy(publicId)
+        // console.log("response",response)
         return response
-        
+
     } catch (error) {
-         console.error(401, "Error while deleting image from cloudinary",error)
-        
+        console.log("Error while deleting image from cloudinary",error)
+        return null
     }
 }
 
 export { 
     uploadOnCloudinary,
-    oldImageDelete
+    deleteFromCloudinary
  }

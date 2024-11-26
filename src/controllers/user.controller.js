@@ -3,7 +3,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
 import {
   uploadOnCloudinary,
-  oldImageDelete as deleteOldImage,
+  deleteFromCloudinary as deleteOldImage,
 } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
@@ -14,7 +14,7 @@ const generateAccessAndRefreshTokens = async (userId) => {
   try {
     const user = await User.findById(userId);
     const accessToken = user.generateAccessToken();
-    console.log(accessToken);
+    // console.log(accessToken);
 
     const refreshToken = user.generateRefreshToken();
 
@@ -56,7 +56,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   // check for image, check for avatar
-  console.log("request files", req.files);
+  // console.log("request files", req.files);
 
   const avatarLocalPath = req.files?.avatar[0]?.path;
   //const coverImageLocalPath = req.files?.coverImage[0]?.path
@@ -143,7 +143,7 @@ const loginUser = asyncHandler(async (req, res) => {
     "-password -refreshToken"
   );
 
-  console.log("loginUser:", loggedInUser);
+  // console.log("loginUser:", loggedInUser);
 
   // const options = {
   //   httpOnly: true,
@@ -267,7 +267,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
   const { fullname, email } = req.body;
 
   if (!fullname && !email) {
-    throw new ApiError(400, "All fiels are required");
+    throw new ApiError(400, "All fields are required");
   }
 
   const user = User.findByIdAndUpdate(
@@ -288,9 +288,15 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
 
 const updatedUserAvatar = asyncHandler(async (req, res) => {
   const avatarLocalPath = req.file?.path;
-
   if (!avatarLocalPath) {
     throw new ApiError(400, "Avatar file is missing");
+  }
+   
+  const oldAavtar = await findById(req.user?._id);
+
+   const avatarDelete = await deleteFromCloudinary(oldAavtar.avatar);
+  if(!avatarDelete){
+    throw new ApiError(500 , "Error while deleting avatar from cloudinary")
   }
 
   const avatar = await uploadOnCloudinary(avatarLocalPath);
@@ -309,7 +315,6 @@ const updatedUserAvatar = asyncHandler(async (req, res) => {
     { new: true }
   ).select("-password");
 
-  await deleteOldImage(avatar.url);
 
   return res
     .status(200)
@@ -404,7 +409,7 @@ const getuserChannelProfile = asyncHandler(async (req, res) => {
     },
   ]);
 
-  console.log(channel);
+  // console.log(channel);
 
   if (!channel?.length) {
     throw new ApiError(404, "channel does not existes");

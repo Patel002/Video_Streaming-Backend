@@ -8,12 +8,34 @@ const commentSchema = new Schema({
         required: true
     },
     video: { 
-        type: Schema.Types.ObjectId,
-        ref: "Video"
+        _id: {
+            type: Schema.Types.ObjectId,
+            required: true,
+            ref: "Video"    
+        },
+        videoFile: {
+            type: String,
+            required: true
+        },
+        thumbnails: {
+            type: String,
+            required: true
+        },
     },
     owner: {
-        type: Schema.Types.ObjectId,
-        ref: "User"
+            _id: {
+                type: Schema.Types.ObjectId,
+                required: true,
+                ref: "User"
+            },
+            username: {
+                type: String,
+                required: true
+            },
+            avatar: {
+                type: String,
+                required: true
+        },
     }
 },{ timestamps: true })
 

@@ -62,7 +62,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
 
            return res.status(200)
             .json(
-                new ApiResponse(200,"Videos fetched successfully", video)
+                new ApiResponse(200,video,"Videos fetched successfully")
             )
 
 })
@@ -113,7 +113,7 @@ const publishVideo = asyncHandler(async (req, res) => {
     }
 
    return res.status(200)
-    .json(new ApiResponse(200,"Video is live now", video))
+    .json(new ApiResponse(200,video,"Video is live now"))
 })
 
 const getVideoById = asyncHandler(async (req,res) => {
@@ -132,8 +132,6 @@ const getVideoById = asyncHandler(async (req,res) => {
     
    return res.status(200)
     .json(new ApiResponse(200,"Video fetched successfully", video))
-
-    // console.log(`this is ${video} fetched from database`)
 
 })
 
@@ -180,7 +178,7 @@ const updateVideoDetails = asyncHandler(async (req, res) => {
     )
 
     return res.status(200)
-            .json(new ApiResponse(200, "Video details updated successfully", videoUpdate))
+            .json(new ApiResponse(200,videoUpdate,"Video details updated successfully"))
 
 })
 
@@ -210,7 +208,7 @@ const deleteVideo = asyncHandler(async(req, res) => {
         throw new ApiError(500, "Error while deleting video file url")
 
       return res.status(200)
-       .json(new ApiResponse(200,"Video successfully deleted from database and cloudinary",videoDeleteFromCloudinary,thumbnailDelete))
+       .json(new ApiResponse(200,videoDeleteFromCloudinary,thumbnailDelete,"Video successfully deleted from database and cloudinary"))
 
 })
 
@@ -237,7 +235,7 @@ const togglePublishStatus = asyncHandler(async(req,res) => {
     }
     
     return res.status(200)
-            .json(new ApiResponse(200, "Video publish toggle updated successfully", togglePublish))
+            .json(new ApiResponse(200,togglePublish, "Video publish toggle updated successfully"))
 })
 
 export{
